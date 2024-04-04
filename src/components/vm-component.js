@@ -2,18 +2,18 @@
 import { useEffect } from 'react';
 import { useInitNear, Widget, EthersProviderContext } from 'near-social-vm';
 
-import { useWallet } from '@/wallets/wallet-selector';
 import { useEthersProviderContext } from '@/wallets/web3-wallet';
 import { NetworkId } from '@/config';
+import { useStore } from '@/layout';
 
 export default function Component({ src }) {
   const ethersContext = useEthersProviderContext();
-  const { selector } = useWallet();
+  const { wallet } = useStore();
   const { initNear } = useInitNear();
 
   useEffect(() => {
-    initNear && selector && initNear({ networkId: NetworkId, selector });
-  }, [initNear, selector]);
+    initNear && wallet.selector && initNear({ networkId: NetworkId, selector: wallet.selector });
+  }, [initNear, wallet]);
 
   return (
     <div>
