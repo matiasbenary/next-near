@@ -1,4 +1,3 @@
-'use client';
 import { useEffect } from 'react';
 import { useInitNear, Widget, EthersProviderContext } from 'near-social-vm';
 
@@ -12,7 +11,7 @@ export default function Component({ src }) {
   const { initNear } = useInitNear();
 
   useEffect(() => {
-    initNear && wallet.selector && initNear({ networkId: NetworkId, selector: wallet.selector });
+    initNear && wallet && initNear({ networkId: NetworkId, selector: wallet.selector });
   }, [initNear, wallet]);
 
   return (

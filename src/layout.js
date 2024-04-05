@@ -1,39 +1,38 @@
-"use client";
-import "@near-wallet-selector/modal-ui/styles.css";
-
-import { Navigation } from "@/components/navigation";
-import { Wallet } from "@/wallets/near-wallet";
-import { NetworkId, HelloNearContract } from "@/config";
 import { useEffect } from "react";
-
 import { create as createStore } from 'zustand';
 import { distinctUntilChanged, map } from 'rxjs';
 
-const wallet = new Wallet({ createAccessKeyFor: HelloNearContract[NetworkId], networkId: NetworkId })
+import { Wallet } from "@/wallets/near-wallet";
+import { Navigation } from "@/components/navigation";
+import { NetworkId, HelloNearContract } from "@/config";
 
 export const useStore = createStore((set) => ({
-  wallet: wallet,
+  wallet: undefined,
   signedAccountId: '',
+  setWallet: (wallet) => set({ wallet }),
   setSignedAccountId: (signedAccountId) => set({ signedAccountId }),
 }))
 
 export default function RootLayout({ children }) {
 
-  const { setSignedAccountId } = useStore();
+  const { setSignedAccountId, setWallet } = useStore();
 
   useEffect(() => {
+    const wallet = new Wallet({ createAccessKeyFor: HelloNearContract[NetworkId], networkId: NetworkId })
+    setWallet(wallet);
+
     wallet.startUp();
 
+    // subscribe to account changes (sign-in, sign-out)
     wallet.selector.then(
-      walletSelector => {
-        walletSelector.store.observable
+      selector => {
+        selector.store.observable
           .pipe(
-            map((state) => state.accounts),
+            map(state => state.accounts),
             distinctUntilChanged()
           )
-          .subscribe((accounts) => {
-            const signedAccountId = accounts.find((account) => account.active)?.accountId || '';
-            setSignedAccountId(signedAccountId);
+          .subscribe(accounts => {
+            setSignedAccountId(accounts.find(account => account.active)?.accountId || '');
           });
       });
   }, [])

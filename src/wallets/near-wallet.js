@@ -6,10 +6,9 @@ import { providers } from 'near-api-js';
 // wallet selector
 import '@near-wallet-selector/modal-ui/styles.css';
 import { setupModal } from '@near-wallet-selector/modal-ui';
-import { setupWalletSelector } from '@near-wallet-selector/core';
-import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
-
 import { setupHereWallet } from '@near-wallet-selector/here-wallet';
+import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
+import { setupWalletSelector } from '@near-wallet-selector/core';
 
 const THIRTY_TGAS = '30000000000000';
 const NO_DEPOSIT = '0';
@@ -38,9 +37,9 @@ export class Wallet {
   startUp = async () => {
     const walletSelector = await this.selector;
     const isSignedIn = walletSelector.isSignedIn();
-  
+
     if (isSignedIn) {
-      this.accountId = walletSelector.store.getState().accounts[0].accountId;
+      this.accountId = walletSelector.store.getState().accounts.find(account => account.active)?.accountId;
       this.selectedWallet = await walletSelector.wallet();
     }
 

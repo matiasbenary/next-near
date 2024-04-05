@@ -7,12 +7,13 @@ import NearLogo from 'public/near-logo.svg';
 import { useStore } from '@/layout';
 
 export const Navigation = () => {
-
-  const { signedAccountId, wallet, setSignedAccountId } = useStore();
+  const { signedAccountId, wallet } = useStore();
   const [action, setAction] = useState(() => { });
   const [label, setLabel] = useState('Loading...');
 
   useEffect(() => {
+    if (!wallet) return;
+
     if (signedAccountId) {
       setAction(() => wallet.signOut);
       setLabel(`Logout ${signedAccountId}`);
