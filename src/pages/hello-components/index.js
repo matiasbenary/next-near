@@ -6,6 +6,7 @@ import { NetworkId, ComponentMap } from "@/config";
 
 const Component = dynamic(() => import("@/components/vm-component"), {
   ssr: false,
+  loading: () => <p>Loading Component...</p>,
 });
 
 const socialComponents = ComponentMap[NetworkId];
