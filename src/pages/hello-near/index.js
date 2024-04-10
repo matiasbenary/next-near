@@ -24,7 +24,9 @@ export default function HelloNear() {
     );
   }, [wallet]);
 
-  useEffect(() => { setLoggedIn(signedAccountId ? true : false) }, [signedAccountId]);
+  useEffect(() => {
+    setLoggedIn(!!signedAccountId);
+  }, [signedAccountId]);
 
   const saveGreeting = async () => {
     setShowSpinner(true);

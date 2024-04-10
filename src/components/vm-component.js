@@ -11,8 +11,8 @@ export default function Component({ src }) {
   const { initNear } = useInitNear();
 
   useEffect(() => {
-    initNear && wallet && initNear({ networkId: NetworkId, selector: wallet.selector });
-  }, [initNear, wallet]);
+    wallet && initNear && initNear({ networkId: NetworkId, selector: wallet.selector });
+  }, [wallet, initNear]);
 
   return (
     <div>
